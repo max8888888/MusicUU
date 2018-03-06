@@ -14,6 +14,7 @@ import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -23,6 +24,8 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
+
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -611,7 +614,13 @@ public class LyricView extends View {
                         // Log.e("qtfreet00",""+line);
                         analyzeLyric(lyricInfo, line);
                     } catch (Exception e) {
-
+                        try {
+                            analyzeLyricByJson(lyricInfo, line);
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                            mDefaultHint = "歌词加载失败";
+                            invalidateView();
+                        }
                     }
 
                 }
@@ -628,6 +637,24 @@ public class LyricView extends View {
         } else {
             mDefaultHint = "暂无歌词";
             invalidateView();
+        }
+    }
+
+    private void analyzeLyricByJson(LyricInfo lyricInfo, String line){
+        try {
+            JSONObject jsonObject = new JSONObject(line);
+            JSONObject lrcObj = jsonObject.optJSONObject("lrc");
+            if(lrcObj != null){
+                String lyricStr = lrcObj.optString("lyric");
+                if(!TextUtils.isEmpty(lyricStr)){
+                    String[] splitArray = lyricStr.split("\n");
+                    for(String str : splitArray){
+                        analyzeLyric(lyricInfo, str);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
