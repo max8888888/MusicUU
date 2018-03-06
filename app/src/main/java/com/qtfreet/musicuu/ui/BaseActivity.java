@@ -1,5 +1,6 @@
 package com.qtfreet.musicuu.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,10 +18,12 @@ import butterknife.Bind;
  * Created by qtfreet00 on 2016/9/1.
  */
 public abstract class BaseActivity extends AppCompatActivity {
+    protected Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = this;
         initView(savedInstanceState);
     }
 

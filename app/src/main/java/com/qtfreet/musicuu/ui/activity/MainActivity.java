@@ -1,18 +1,26 @@
 package com.qtfreet.musicuu.ui.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.OrientationHelper;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iflytek.autoupdate.IFlytekUpdate;
@@ -24,15 +32,20 @@ import com.iflytek.autoupdate.UpdateType;
 import com.iflytek.sunflower.FlowerCollector;
 import com.qtfreet.musicuu.R;
 import com.qtfreet.musicuu.model.Constant.Constants;
+import com.qtfreet.musicuu.model.OnHistoryItemClickListener;
 import com.qtfreet.musicuu.ui.BaseActivity;
+import com.qtfreet.musicuu.ui.adapter.HistoryAdapter;
+import com.qtfreet.musicuu.ui.adapter.MySimpleDivider;
 import com.qtfreet.musicuu.utils.FileUtils;
 import com.qtfreet.musicuu.utils.SPUtils;
+import com.qtfreet.musicuu.utils.Sp;
 import com.zhy.m.permission.MPermissions;
 import com.zhy.m.permission.PermissionDenied;
 import com.zhy.m.permission.PermissionGrant;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -41,13 +54,24 @@ import me.curzbin.library.BottomDialog;
 import me.curzbin.library.Item;
 import me.curzbin.library.OnItemClickListener;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, View.OnKeyListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, View.OnKeyListener,
+        View.OnTouchListener, OnHistoryItemClickListener {
     @Bind(R.id.ib_search_btn)
     ImageButton mSearchButton;
     @Bind(R.id.et_search_content)
     EditText mSearchEditText;
+    @Bind(R.id.lv_search_history_layout)
+    LinearLayout mSearchHistoryLayout;
+    @Bind(R.id.lv_search_history_list)
+    RecyclerView mSearchHistoryList;
+    @Bind(R.id.lv_search_history_clear)
+    TextView mSearchHistoryClear;
+
+    private static final String HISTORY = "history";
     private static final int REQUECT_CODE_SDCARD = 2;
 
+    HistoryAdapter mHistoryAdapter;
+    ArrayList<String> mHistoryList = new ArrayList<String>();
 
     @Override
     public void initView(Bundle savedInstanceState) {
@@ -65,7 +89,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             }
         });
         mSearchEditText.setOnKeyListener(this);
+        mSearchEditText.setOnTouchListener(this);
+        mSearchHistoryClear.setOnClickListener(this);
         //checkUpdate();
+        initHistory();
+    }
+
+    private void initHistory() {
+        mHistoryAdapter = new HistoryAdapter(mContext, mHistoryList);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
+        mSearchHistoryList.setLayoutManager(layoutManager);
+        layoutManager.setOrientation(OrientationHelper.VERTICAL);
+        mSearchHistoryList.setAdapter(mHistoryAdapter);
+        mSearchHistoryList.addItemDecoration(new MySimpleDivider(mContext));
+        mSearchHistoryList.setNestedScrollingEnabled(false);
+        mHistoryAdapter.setOnHistoryClickListener(this);
     }
 
 
@@ -99,6 +137,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onPause() {
         super.onPause();
         FlowerCollector.onPause(this);
+        mSearchHistoryLayout.setVisibility(View.GONE);
     }
 
     private void checkUpdate() {
@@ -149,6 +188,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             Toast.makeText(MainActivity.this, R.string.no_music_name, Toast.LENGTH_SHORT).show();
             return;
         }
+        //先存储，再查询
+        saveHistory(text);
+        actionSearch(text);
+    }
+
+    private void actionSearch(String text){
         if (!mistype.equals("wy")) {
             try {
                 text = URLEncoder.encode(text, "UTF-8");
@@ -165,7 +210,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             bundle.putString(Constants.TYPE, mistype);
             startActivity(MainActivity.this, SearchActivity.class, bundle);
         }
+    }
 
+    //存储查询记录
+    private void saveHistory(String tarName){
+        ArrayList<String> stringList = Sp.getInstance(mContext).getStringList(HISTORY);
+        if(!stringList.contains(tarName)){
+            stringList.add(tarName);
+        }
+        Sp.getInstance(mContext).putStringList(HISTORY, stringList);
     }
 
     private void startActivity(Context ctx, Class<?> resClass, Bundle bundle) {
@@ -245,12 +298,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                             }
                         }).show();
                 break;
+            case R.id.lv_search_history_clear:
+                Log.i("xmg", "click1");
+                Sp.getInstance(mContext).removeList(HISTORY);
+                mHistoryList.clear();
+                mHistoryAdapter.notifyDataSetChanged();
+                break;
         }
     }
 
     @Override
     public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-        if (keyCode == KeyEvent.KEYCODE_ENTER) {
+        if (keyCode == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_UP) {
             // 先隐藏键盘
             ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
                     .hideSoftInputFromWindow(this.getCurrentFocus()
@@ -259,5 +318,33 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             startSearchSong();
         }
         return false;
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if(event.getAction() == MotionEvent.ACTION_UP){
+            ArrayList<String> stringList = Sp.getInstance(mContext).getStringList(HISTORY);
+            mHistoryList.clear();
+            mHistoryList.addAll(stringList);
+
+            if(mHistoryList.size() == 0){
+                mSearchHistoryLayout.setVisibility(View.GONE);
+            }else {
+                mSearchHistoryLayout.setVisibility(View.VISIBLE);
+                mHistoryAdapter.notifyDataSetChanged();
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void onHistoryItemClick(View v, String item, int position) {
+        // 先隐藏键盘
+        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
+                .hideSoftInputFromWindow(this.getCurrentFocus()
+                        .getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        //再查询
+        actionSearch(item);
     }
 }
