@@ -19,7 +19,7 @@
             android:layout_gravity="center"
             android:text=""
             android:textColor="@android:color/white"
-            android:textSize="15dip" />
+            android:textSize="16dp" />
     </android.support.v7.widget.Toolbar>
 
 </android.support.design.widget.AppBarLayout>

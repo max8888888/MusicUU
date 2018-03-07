@@ -18,63 +18,84 @@
         android:paddingLeft="25dp"
         android:paddingRight="25dp">
 
+        <ImageView
+            android:id="@+id/iv_title_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:src="@mipmap/netease"
+            />
+
+        <TextView
+            android:id="@+id/iv_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="160dp"
+            android:text="网易云音乐"
+            />
         <LinearLayout
             android:id="@+id/ll_search_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="200dp"
             android:background="@drawable/search_btn_bg"
             android:orientation="horizontal"
-            android:padding="5dp">
+            android:padding="3dp"
+            >
 
             <EditText
                 android:id="@+id/et_search_content"
                 style="?android:attr/textViewStyle"
                 android:layout_width="0dip"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:background="@null"
-                android:hint="搜索"
+                android:background="@color/white"
+                android:hint="搜索（歌名，人名等）"
                 android:imeOptions="actionSearch"
+                android:gravity="center_vertical"
                 android:padding="2dp"
                 android:singleLine="true"
                 android:textColor="#FF666666" />
 
             <ImageButton
                 android:id="@+id/ib_search_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:background="@null"
-                android:padding="0dp"
+                android:padding="5dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/search_drawable_left" />
+                android:src="@drawable/ic_search_gray" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/iv_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ll_search_container"
-            android:layout_marginTop="20dip"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"
-            android:src="@drawable/bk" />
+        <!--<ImageView-->
+            <!--android:id="@+id/iv_photo"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/ll_search_container"-->
+            <!--android:layout_marginTop="20dip"-->
+            <!--android:adjustViewBounds="true"-->
+            <!--android:scaleType="centerInside"-->
+            <!--android:src="@drawable/bk" />-->
 
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/iv_photo"
-            android:layout_marginTop="20dip"
-            android:lineSpacingExtra="5dip"
-            android:text="这里依然有新亮的色彩,红的花,碧绿的叶子,和我们同行的人,我们好像,总是在晴天的时候,期待下雨,在下雨的时候,盼望天晴,就在这样的期待和盼望中,我们青春的时光,渐渐游走,但不论晴天雨里,愿你度过的每一天,都有值得留恋的光景,都能美妙不已"
-            android:typeface="serif" />
+        <!--<TextView-->
+            <!--android:id="@+id/text"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/iv_photo"-->
+            <!--android:layout_marginTop="20dip"-->
+            <!--android:lineSpacingExtra="5dip"-->
+            <!--android:text="这里依然有新亮的色彩,红的花,碧绿的叶子,和我们同行的人,我们好像,总是在晴天的时候,期待下雨,在下雨的时候,盼望天晴,就在这样的期待和盼望中,我们青春的时光,渐渐游走,但不论晴天雨里,愿你度过的每一天,都有值得留恋的光景,都能美妙不已"-->
+            <!--android:typeface="serif" />-->
 
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/ll_search_container"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             android:layout_marginBottom="200dp">
 
             <LinearLayout

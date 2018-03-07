@@ -98,6 +98,7 @@ public class SearchMvActivity extends BaseActivity implements OnVideoClickListen
             @Override
             public void onFailed(int what, Response<String> response) {
                 super.onFailed(what, response);
+                hanlder.sendEmptyMessage(1);
             }
         });
 

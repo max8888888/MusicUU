@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,6 +68,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     RecyclerView mSearchHistoryList;
     @Bind(R.id.lv_search_history_clear)
     TextView mSearchHistoryClear;
+    @Bind(R.id.iv_title_icon)
+    ImageView mSearchTitleIcon;
+    @Bind(R.id.iv_title_text)
+    TextView mSearchTitleText;
 
     private static final String HISTORY = "history";
     private static final int REQUECT_CODE_SDCARD = 2;
@@ -80,7 +86,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         firstUse();
         ButterKnife.bind(this);
         mistype = "wy";
-        setTitleName("首页", false);
+        setTitleName("歌曲搜索", false);
         floatingActionButton.setOnClickListener(this);
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -264,23 +270,29 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         return super.onOptionsItemSelected(item);
     }
 
+    BottomDialog mBottomDialog;
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
-                new BottomDialog(MainActivity.this)
-                        .title(getString(R.string.sel_music_type))             //设置标题
-                        .inflateMenu(R.menu.music_type)         //传人菜单内容
-                        .itemClick(new OnItemClickListener() {  //设置监听
+                mBottomDialog =new BottomDialog(MainActivity.this)
+                        .title(getString(R.string.sel_music_type))             //设置标题//传人菜单内容 //设置监听
+                        .inflateMenu(R.menu.music_type, new OnItemClickListener() {
                             @Override
                             public void click(Item item) {
                                 String type = item.getTitle();
                                 if (type.equals(getString(R.string.music_wy))) {
                                     mistype = "wy";
+                                    mSearchTitleIcon.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.netease));
+                                    mSearchTitleText.setText(type);
                                 } else if (type.equals(getString(R.string.music_qq))) {
                                     mistype = "qq";
+                                    mSearchTitleIcon.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.qq));
+                                    mSearchTitleText.setText(type);
                                 } else if (type.equals(getString(R.string.music_kg))) {
                                     mistype = "kg";
+                                    mSearchTitleIcon.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.kugou));
+                                    mSearchTitleText.setText(type);
                                 } else if (type.equals(getString(R.string.music_kw))) {
                                     mistype = "kw";
                                 } else if (type.equals(getString(R.string.music_bd))) {
@@ -291,12 +303,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                     mistype = "dx";
                                 } else if (type.equals(getString(R.string.music_xm))) {
                                     mistype = "xm";
+                                    mSearchTitleIcon.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.xiami));
+                                    mSearchTitleText.setText(type);
                                 } else if (type.equals(getString(R.string.mv_yinyuetai))) {
                                     mistype = "yinyutai";
+                                    mSearchTitleIcon.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.yinyuetai));
+                                    mSearchTitleText.setText(type);
                                 }
                                 Toast.makeText(MainActivity.this, "已切换成 " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                                mBottomDialog.dismiss();
                             }
-                        }).show();
+                        });
+                mBottomDialog.show();
                 break;
             case R.id.lv_search_history_clear:
                 Log.i("xmg", "click1");
