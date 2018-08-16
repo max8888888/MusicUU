@@ -98,7 +98,7 @@ public class DownloadService extends Service {
             return;
 
         }
-        Log.e("qtfreet0000", "开始下载");
+        Log.e("qtfreet0000", "开始下载  url="+url);
         FileDownloader.getImpl().create(url)
                 .setPath(path + "/" + name)
                 .setListener(new FileDownloadListener() {

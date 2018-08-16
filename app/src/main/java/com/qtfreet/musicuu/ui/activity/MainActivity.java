@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -186,7 +187,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     String mistype = "";
     @Bind(R.id.fab)
-    FloatingActionButton floatingActionButton;
+    Button floatingActionButton;
 
     private void startSearchSong() {
         String text = mSearchEditText.getText().toString();

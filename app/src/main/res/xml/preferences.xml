@@ -14,10 +14,10 @@
             android:summaryOn="目前已开启自动更新"
             android:title="自动检测更新" />
         <EditTextPreference
-            android:defaultValue="musicuu"
+            android:defaultValue="MusicDownload"
             android:key="@string/save_path"
             android:layout="@layout/preference_item"
-            android:summary="默认保存在SD卡musicuu文件夹下"
+            android:summary="默认保存在SD卡MusicDownload文件夹下"
             android:title="下载路径" />
 
 
@@ -47,6 +47,9 @@
     <PreferenceCategory
         android:layout="@layout/preference_category_widget"
         android:title="那些人">
+        <Preference
+            android:layout="@layout/preference_item"
+            android:title="@string/source_designer" />
         <Preference
             android:layout="@layout/preference_item"
             android:title="@string/app_designer" />

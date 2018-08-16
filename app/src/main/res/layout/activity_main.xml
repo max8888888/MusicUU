@@ -23,27 +23,25 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="100dp"
-            android:src="@mipmap/netease"
-            />
+            android:layout_marginTop="110dp"
+            android:src="@mipmap/netease" />
 
         <TextView
             android:id="@+id/iv_title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="160dp"
-            android:text="网易云音乐"
-            />
+            android:layout_marginTop="170dp"
+            android:text="网易云音乐" />
+
         <LinearLayout
             android:id="@+id/ll_search_container"
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="220dp"
             android:background="@drawable/search_btn_bg"
             android:orientation="horizontal"
-            android:padding="3dp"
-            >
+            android:padding="3dp">
 
             <EditText
                 android:id="@+id/et_search_content"
@@ -53,9 +51,9 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:background="@color/white"
+                android:gravity="center_vertical"
                 android:hint="搜索（歌名，人名等）"
                 android:imeOptions="actionSearch"
-                android:gravity="center_vertical"
                 android:padding="2dp"
                 android:singleLine="true"
                 android:textColor="#FF666666" />
@@ -70,33 +68,28 @@
                 android:src="@drawable/ic_search_gray" />
         </LinearLayout>
 
-        <!--<ImageView-->
-            <!--android:id="@+id/iv_photo"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@id/ll_search_container"-->
-            <!--android:layout_marginTop="20dip"-->
-            <!--android:adjustViewBounds="true"-->
-            <!--android:scaleType="centerInside"-->
-            <!--android:src="@drawable/bk" />-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/text"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@id/iv_photo"-->
-            <!--android:layout_marginTop="20dip"-->
-            <!--android:lineSpacingExtra="5dip"-->
-            <!--android:text="这里依然有新亮的色彩,红的花,碧绿的叶子,和我们同行的人,我们好像,总是在晴天的时候,期待下雨,在下雨的时候,盼望天晴,就在这样的期待和盼望中,我们青春的时光,渐渐游走,但不论晴天雨里,愿你度过的每一天,都有值得留恋的光景,都能美妙不已"-->
-            <!--android:typeface="serif" />-->
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_search_container"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dip"
+            android:lineSpacingExtra="5dip"
+            android:shadowColor="#ff000000"
+            android:shadowRadius="5"
+            android:shadowDx="3"
+            android:shadowDy="3"
+            android:text="========== 小马哥作品 =========="
+            android:typeface="serif" />
 
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/ll_search_container"
+            android:layout_marginBottom="200dp"
             android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:layout_marginBottom="200dp">
+            android:paddingRight="5dp">
 
             <LinearLayout
                 android:id="@+id/lv_search_history_layout"
@@ -130,13 +123,18 @@
     </RelativeLayout>
 
 
-    <android.support.design.widget.FloatingActionButton
+    <Button
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_add_white_24dp"
-        drakeet:borderWidth="0dp" />
+        android:layout_margin="30dp"
+        android:background="@drawable/round_red_90"
+        android:includeFontPadding="false"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="切换音乐源"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
 
 </android.support.design.widget.CoordinatorLayout>
