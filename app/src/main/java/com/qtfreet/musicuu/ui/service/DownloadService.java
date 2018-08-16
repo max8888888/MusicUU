@@ -39,7 +39,7 @@ public class DownloadService extends Service {
         if (intent == null) {
             return START_NOT_STICKY;
         }
-        final String path = Environment.getExternalStorageDirectory() + "/" + SPUtils.get(Constants.MUSICUU_PREF, this, Constants.SAVE_PATH, "musicuu");
+        final String path = Environment.getExternalStorageDirectory() + "/" + SPUtils.get(Constants.MUSICUU_PREF, this, Constants.SAVE_PATH, Constants.DEFAULT_DOWNLOAD_PATH);
         mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mBuilder = new NotificationCompat.Builder(this);
         final String url = intent.getStringExtra(Constants.URL);
